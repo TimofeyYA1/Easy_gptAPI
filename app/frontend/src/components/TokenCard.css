@@ -1,0 +1,86 @@
+/* Карточка токена */
+.token-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #0e1a2f;
+  padding: 12px 16px;
+  border-radius: 10px;
+  color: white;
+  gap: 12px;
+  position: relative;
+  border: 1px solid #1e2b45;
+  margin-bottom: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.token-card:hover {
+  background-color: #152542;
+}
+
+/* Остальные стили без изменений */
+.token-checkbox {
+  width: 16px;
+  height: 16px;
+}
+
+.token-name {
+  flex: 1;
+  font-weight: 500;
+  color: #cbd6f1;
+}
+
+.token-string {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #6daaff;
+  cursor: pointer;
+  font-family: monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 4px 8px;
+  border: 1px solid #345;
+  border-radius: 6px;
+  background-color: #132239;
+  max-width: 180px;
+}
+
+.token-value {
+  flex: 1;
+}
+
+.copy-icon {
+  margin-left: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #6daaff;
+  transition: color 0.3s;
+}
+
+.copy-icon:hover {
+  color: #ffffff;
+}
+
+.token-balance {
+  width: 100px;
+  text-align: right;
+  color: #cbd6f1;
+}
+
+.top-up-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.menu-icon {
+  cursor: pointer;
+  font-size: 20px;
+  padding: 4px;
+}

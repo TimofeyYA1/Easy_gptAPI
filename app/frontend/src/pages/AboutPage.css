@@ -1,0 +1,66 @@
+/* src/pages/AboutPage.css */
+.about-page {
+  background-color: #0b0f1f;
+  color: white;
+  min-height: 100vh;
+  padding: 60px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.about-container {
+  max-width: 900px;
+  text-align: center;
+}
+
+.about-intro {
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+  color: #b0c4de;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  margin-bottom: 50px;
+}
+
+.feature-card {
+  background-color: #11172b;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.feature-card h3 {
+  color: var(--accent-blue);
+  margin-bottom: 10px;
+}
+
+.about-cta {
+  margin-top: 40px;
+  font-size: 1.2rem;
+}
+
+.about-cta .primary-button {
+  margin-top: 15px;
+  padding: 10px 25px;
+  font-size: 1rem;
+  background-color: var(--accent-blue);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s;
+}
+
+.about-cta .primary-button:hover {
+  background-color: #3399ff;
+}

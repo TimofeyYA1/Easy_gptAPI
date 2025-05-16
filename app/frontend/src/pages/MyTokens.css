@@ -1,0 +1,133 @@
+.tokens-page-container {
+  background-color: #0a0d1a;
+  color: white;
+  min-height: 100vh;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tokens-header {
+  width: 100%;
+  max-width: 960px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.tokens-header h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.tokens-controls {
+  display: flex;
+  gap: 12px;
+}
+
+.tokens-controls input {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid #1c2236;
+  background-color: #11172b;
+  color: white;
+  width: 240px;
+}
+
+.tokens-controls button {
+  background-color: var(--accent-blue, #339af0);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.tokens-list-wrapper {
+  width: 100%;
+  max-width: 960px;
+  background-color: #161b2d; /* мягкий серо-синий вместо белого */
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.tokens-list-scrollable {
+  max-height: 70vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 6px;
+}
+
+.tokens-list-scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tokens-list-scrollable::-webkit-scrollbar-thumb {
+  background-color: #2b2f45;
+  border-radius: 4px;
+}
+.dropdown-menu {
+  background-color: #192640;
+  border: 1px solid #304060;
+  border-radius: 6px;
+  padding: 6px 0;
+  width: 140px;
+  z-index: 2147483647;
+}
+
+.dropdown-menu div {
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #cbd6f1;
+}
+
+.dropdown-menu div:hover {
+  background-color: #263758;
+}
+.delete-selected-btn-container {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.delete-selected-btn {
+  background-color: #e53e3e;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.delete-selected-btn:hover {
+  background-color: #c53030;
+} 
+.danger-btn {
+  background-color: #e53935;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-left: 8px;
+}
+
+.danger-btn:hover {
+  background-color: #c62828;
+}
+.no-tokens-message {
+  text-align: center;
+  color: #ccc;
+  padding: 20px;
+  font-size: 16px;
+}

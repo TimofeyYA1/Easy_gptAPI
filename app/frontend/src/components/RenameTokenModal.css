@@ -1,0 +1,85 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(10, 13, 26, 0.85); /* затемнение */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+.modal-content {
+  background-color: #1c2236;
+  color: white;
+  padding: 24px 28px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 400px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.modal-content input {
+  width: 92.5%;
+  padding: 10px 14px;
+  border: 1px solid #2d3553;
+  border-radius: 8px;
+  background-color: #101524;
+  color: white;
+  font-size: 14px;
+}
+
+.error-message {
+  color: #ff6b6b;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.modal-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.modal-buttons button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.modal-buttons button:first-child {
+  background-color: var(--accent-blue, #339af0);
+  color: white;
+}
+
+.modal-buttons .cancel {
+  background-color: #2d3553;
+  color: #ccc;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+    

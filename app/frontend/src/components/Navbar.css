@@ -1,0 +1,74 @@
+/* src/components/Navbar.css */
+:root {
+  --navbar-bg: #11172b;
+  --accent-blue: #4da8ff;
+}
+
+.navbar {
+  background-color: var(--navbar-bg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 60px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+}
+
+.logo span {
+  color: var(--accent-blue);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  margin-left: 25px;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: var(--accent-blue);
+}
+
+/* Стиль для кнопок Выйти и Login */
+.nav-btn,
+.nav-links a.login-btn {
+  background-color: var(--accent-blue);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-left: 25px;
+  text-align: center;
+  display: inline-block;
+}
+
+.nav-btn:hover,
+.nav-links a.login-btn:hover {
+  background-color: #3d95e6;
+}
+
+/* Если кнопка Выйти */
+.nav-btn.logout {
+  background-color: #f44336; /* Красный для кнопки выхода */
+}
+
+.nav-btn.logout:hover {
+  background-color: #e53935;
+}

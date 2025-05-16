@@ -4,7 +4,7 @@ services:
     image: postgres:13
     container_name: pgsql
     ports:
-      - "5433:5432"  # Избегаем конфликта с локальной БД
+      - "5432:5432" 
     environment:
       POSTGRES_DB: ${DBNAME}
       POSTGRES_USER: postgres
@@ -14,8 +14,7 @@ services:
     restart: unless-stopped
 
   app_api:
-    build:
-      context:  ./fastapi_server
+    image: easy_gptapi-app_api
     container_name: backend_container
     depends_on:
       - postgresql
@@ -37,8 +36,7 @@ services:
     restart: unless-stopped
 
   telegram_bot:
-    build:
-      context: ./bot
+    image: easy_gptapi-telegram_bot
     container_name: telegram_bot
     depends_on:
       - postgresql

@@ -48,6 +48,18 @@ class DatabaseAdapter:
         try:
             cursor = self.conn.cursor()
             
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS dialogs (
+                    id UUID PRIMARY KEY,
+                    user_token VARCHAR(255) NOT NULL REFERENCES tokens(token) ON DELETE CASCADE,
+                    title TEXT DEFAULT 'Диалог',
+                    messages JSONB DEFAULT '[]',
+                    model TEXT DEFAULT 'gpt-4o',
+                    temperature FLOAT DEFAULT 0.3,
+                    max_tokens INT DEFAULT 1000,
+                    system TEXT
+                );
+            """)
             # Создание таблицы пользователей
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS users (
@@ -60,12 +72,12 @@ class DatabaseAdapter:
             
             # Создание таблицы токенов
             cursor.execute("""
-                CREATE TABLE IF NOT EXISTS tokens (
+               CREATE TABLE IF NOT EXISTS tokens (
                     id SERIAL PRIMARY KEY,
-                    user_id INTEGER REFERENCES users(id),
-                    name VARCHAR(255)  NOT NULL,
+                    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                    name VARCHAR(255) NOT NULL,
                     token VARCHAR(255) UNIQUE NOT NULL,
-                    balance VARCHAR(50) DEFAULT '0',
+                    balance FLOAT DEFAULT 0.0,
                     active BOOLEAN DEFAULT TRUE,
                     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
                 );
@@ -75,9 +87,9 @@ class DatabaseAdapter:
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS payments (
                     id SERIAL PRIMARY KEY,
-                    user_id INTEGER REFERENCES users(id),
-                    token_id INTEGER REFERENCES tokens(id),
-                    amount VARCHAR(50) NOT NULL,
+                    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                    token_id INTEGER REFERENCES tokens(id) ON DELETE CASCADE,
+                    amount FLOAT NOT NULL,
                     status VARCHAR(50) DEFAULT 'pending',
                     payment_id VARCHAR(255),
                     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP

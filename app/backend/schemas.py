@@ -28,7 +28,6 @@ class TokenUpdate(BaseModel):
 
 
 class RenameTokenRequest(BaseModel):
-    token: str  # токен, по которому будем искать в базе
     new_name: str  # новое имя
     
 

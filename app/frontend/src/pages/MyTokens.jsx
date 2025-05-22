@@ -85,7 +85,7 @@ const TokensPage = () => {
                 token={token}
                 selected={selectedTokenIds.includes(token.id)}
                 onSelect={(id) =>handleSelect(id, !selectedTokenIds.includes(id))}
-                onUpdated={fetchTokens}
+                onUpdate={fetchTokens}
                 onDeleted={() =>
                   setTokens((prev) => prev.filter((t) => t.id !== token.id))
                 }

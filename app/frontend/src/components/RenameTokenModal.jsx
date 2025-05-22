@@ -19,7 +19,7 @@ const RenameTokenModal = ({ token, onClose, onRename }) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-        body: JSON.stringify({ name: newName, token: token.token }),
+        body: JSON.stringify({ new_name: newName}),
       });
 
       onRename(); // Вызываем onRename для обновления токенов

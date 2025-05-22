@@ -14,7 +14,7 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const endpoint = mode === 'login' ? '/api/token' : '/api/register';
+    const endpoint = mode === 'login' ? '/api/login' : '/api/register';
 
     try {
       const response = await fetch(`http://localhost:8000${endpoint}`, {

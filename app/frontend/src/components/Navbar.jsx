@@ -18,7 +18,7 @@ const Navbar = () => {
         🤖 EasyGPT<span style={{ color: 'var(--accent-blue)' }}>API</span>
       </div>
       <div className="nav-links">
-        {token && <Link to="/tokens">Мои токены</Link>} {/* Ссылка "Мои токены" слева */}
+        {token && <Link to="/tokens">Мои токены</Link>}
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>
 

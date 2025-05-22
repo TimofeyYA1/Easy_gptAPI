@@ -1,8 +1,18 @@
 // src/pages/AboutPage.jsx
 import React from 'react';
 import './AboutPage.css';
+import { useNavigate } from 'react-router-dom';
 
 const AboutPage = () => {
+  const navigate = useNavigate();
+  const handleStartClick = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/tokens');
+    } else {
+      navigate('/login');
+    }
+  };
   return (
     <div className="about-page">
       <div className="about-container">
@@ -32,7 +42,7 @@ const AboutPage = () => {
 
         <div className="about-cta">
           <p>Готовы начать?</p>
-          <a href="/login" className="primary-button">Создать токен</a>
+          <button onClick={handleStartClick} className="primary-button">Создать токен</button>
         </div>
       </div>
     </div>

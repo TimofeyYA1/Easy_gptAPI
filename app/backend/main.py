@@ -12,7 +12,7 @@ import crud
 import auth
 from db_adapter import DatabaseAdapter
 import psycopg2
-
+import os
 app = FastAPI(title="EasyGPT API Portal")
 
 
@@ -31,7 +31,7 @@ db_adapter.initialize_tables()
 
 
 
-@app.get("/api/user")
+@app.post("/api/user")
 async def get_current_user(current_user: Dict = Depends(auth.get_current_user)):
     if isinstance(current_user.get("created_at"), datetime):
         current_user["created_at"] = current_user["created_at"].isoformat()
@@ -56,6 +56,26 @@ async def register_user(user: schemas.UserCreate):
         expires_delta=access_token_expires,
     )
 
+    return {
+        "access_token": access_token,
+        "token_type": "bearer"
+    }
+
+@app.post("/api/login")
+async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+    user = auth.authenticate_user(form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Неверное имя пользователя или пароль",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    access_token_expires = timedelta(minutes=auth.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = auth.create_access_token(
+        data={"sub": user["username"]}, expires_delta=access_token_expires
+    )
+    
     return {
         "access_token": access_token,
         "token_type": "bearer"
@@ -163,27 +183,92 @@ async def update_payment_status(
         updated_payment["created_at"] = updated_payment["created_at"].isoformat()
     return updated_payment
 
-@app.patch("api/{token}/rename")
+@app.patch("/api/{token}/rename")
 def rename_token(
+    token: str,
     request: schemas.RenameTokenRequest,
     current_user: schemas.User = Depends(get_current_user)
 ):
-    db_token = db_adapter.query(schemas.Token).filter(schemas.Token.token == request.token).first()
+    # Получаем токен из БД
+    db_token = db_adapter.get_single_by_value("tokens", "token", token)
 
     if db_token is None:
         raise HTTPException(status_code=404, detail="Token not found")
     
-    if db_token.user_id != current_user.id:
+    if db_token["user_id"] != current_user["id"]:
         raise HTTPException(status_code=403, detail="You do not have permission to rename this token")
+    
+    # Обновляем имя токена
+    updated_token = db_adapter.update_by_value(
+        "tokens",
+        {"name": request.new_name},
+        "token",
+        token
+    )
 
-    db_token.name = request.name
-    db_adapter.commit()
-    db_adapter.refresh(db_token)
+    if updated_token is None:
+        raise HTTPException(status_code=500, detail="Failed to rename token")
 
-    return {"detail": "Token renamed successfully", "token": {"token": db_token.token, "name": db_token.name}}
+    return {
+        "detail": "Token renamed successfully",
+        "token": {
+            "token": updated_token["token"],
+            "name": updated_token["name"]
+        }
+    }
+
+@app.patch("/api/{token}/regenerate")
+def regenerate_token(
+    token: str,
+    current_user: schemas.User = Depends(get_current_user)
+):
+    # Получаем токен из БД
+    db_token = db_adapter.get_single_by_value("tokens", "token", token)
+
+    if db_token is None:
+        raise HTTPException(status_code=404, detail="Token not found")
+
+    if db_token["user_id"] != current_user["id"]:
+        raise HTTPException(status_code=403, detail="You do not have permission to regenerate this token")
+
+    # Генерация нового токена
+    new_token = f"tok_{os.urandom(8).hex()}"
+
+    # Обновление токена в таблице tokens
+    updated_token = db_adapter.update_by_value(
+        "tokens",
+        {"token": new_token},
+        "token",
+        token
+    )
+
+    if updated_token is None:
+        raise HTTPException(status_code=500, detail="Failed to regenerate token")
+
+    # Обновляем user_token во всех диалогах, где использовался старый токен
+    try:
+        db_adapter.connect()
+        cursor = db_adapter.conn.cursor()
+        cursor.execute(
+            "UPDATE dialogs SET user_token = %s WHERE user_token = %s;",
+            (new_token, token)
+        )
+        db_adapter.conn.commit()
+    except Exception as e:
+        db_adapter.conn.rollback()
+        raise HTTPException(status_code=500, detail=f"Failed to update dialogs: {e}")
+
+    return {
+        "detail": "Token regenerated successfully",
+        "token": {
+            "token": updated_token["token"],
+            "name": updated_token["name"]
+        }
+    }
+
 @app.get("/")
 async def root():
     return {"message": "EasyGPT API работает"}
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True) 

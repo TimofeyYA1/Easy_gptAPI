@@ -24,6 +24,16 @@ const TokenCard = ({ token, selected, onSelect, onUpdate }) => {
     onUpdate();
   };
 
+  const handleGen = async () => {
+    await fetch(`http://localhost:8000/api/${token.token}/regenerate`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    onUpdate();
+  };
+
   const handleSelect = (e) => {
     onSelect(token.id, e.target.checked);
   };
@@ -43,7 +53,7 @@ const TokenCard = ({ token, selected, onSelect, onUpdate }) => {
     if (menuOpen) {
       const rect = iconRef.current.getBoundingClientRect();
       setMenuPosition({ top: rect.bottom + 5, left: rect.left });
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('click', handleClickOutside);
     }
 
     return () => document.removeEventListener('mousedown', handleClickOutside);
@@ -52,10 +62,11 @@ const TokenCard = ({ token, selected, onSelect, onUpdate }) => {
   const renderMenu = () => (
     <div
       className="dropdown-menu"
-      style={{ position: 'fixed', top: menuPosition.top, left: menuPosition.left }}
+      style={{ position: 'fixed', top: menuPosition.top, left: menuPosition.left,width:160 }}
     >
       <div onClick={handleRename}>Переименовать</div>
       <div onClick={handleDelete}>Удалить</div>
+      <div onClick={handleGen}>Перегенирировать</div>
     </div>
   );
   console.log(showRenameModal);

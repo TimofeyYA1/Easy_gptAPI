@@ -19,6 +19,7 @@ const Navbar = () => {
       </div>
       <div className="nav-links">
         {token && <Link to="/tokens">Мои токены</Link>}
+        <Link to="/chat">Чат с ИИ</Link>
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>
 

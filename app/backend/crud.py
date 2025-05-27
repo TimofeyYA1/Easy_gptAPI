@@ -2,12 +2,10 @@ import random
 import string
 from typing import Dict, List, Optional
 import schemas
-from db_adapter import DatabaseAdapter
+from db_adapter import SupabaseAdapter
 import auth
 import os
-db = DatabaseAdapter()
-db.connect()
-db.initialize_tables()
+db = SupabaseAdapter()
 
 def get_user(user_id: int) -> Optional[Dict]:
     """Получение пользователя по ID."""

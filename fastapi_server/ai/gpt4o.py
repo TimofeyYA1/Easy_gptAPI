@@ -47,14 +47,10 @@ def estimate_chatgpt4omini_total_cost(prompt: str, response: str = None,max_toke
     else:
         completion_tokens = 0
     return round(prompt_tokens + completion_tokens, 6)
-db = DatabaseAdapter()
-db.connect()
-db.initialize_tables()
-# 🔹 Единоразовый запрос
+
 @router.post("/ask_gpt-3.5-turbo")
 async def ask_gpt35turbo(prompt: str, token: str, max_tokens: int, temperature: float = 0.3):
     db = DatabaseAdapter()
-    db.connect()
 
     balance = get_token_balance(db, token)
     if max_tokens > balance:
@@ -88,7 +84,6 @@ async def ask_gpt35turbo(prompt: str, token: str, max_tokens: int, temperature: 
 @router.post("/dialogs/create")
 async def create_dialog(data: DialogCreateRequest):
     db = DatabaseAdapter()
-    db.connect()
 
     token_data = db.get_by_value("tokens", "token", data.token)
     if not token_data:
@@ -113,7 +108,6 @@ async def create_dialog(data: DialogCreateRequest):
 @router.post("/dialogs/chat")
 async def chat_with_dialog(payload: DialogQuery):
     db = DatabaseAdapter()
-    db.connect()
     dialog_data = db.get_by_id("dialogs", str(payload.dialog_id))
     if not dialog_data:
         raise HTTPException(status_code=404, detail="Диалог не найден")
@@ -192,7 +186,6 @@ async def chat_with_dialog(payload: DialogQuery):
 @router.get("/dialogs/{token}")
 async def list_dialogs(token: str):
     db = DatabaseAdapter()
-    db.connect()
 
     token_data = db.get_by_value("tokens", "token", token)
     if not token_data:
@@ -206,7 +199,6 @@ async def list_dialogs(token: str):
 @router.delete("/dialogs/{dialog_id}")
 async def delete_dialog(dialog_id: str, token: str):
     db = DatabaseAdapter()
-    db.connect()
 
     dialog_data = db.get_by_id("dialogs", dialog_id)
     if not dialog_data:
@@ -223,7 +215,6 @@ async def delete_dialog(dialog_id: str, token: str):
 @router.patch("/dialogs/rename")
 async def rename_dialog(data: DialogRename):
     db = DatabaseAdapter()
-    db.connect()
 
     dialog_data = db.get_by_id("dialogs", str(data.dialog_id))
     if not dialog_data:

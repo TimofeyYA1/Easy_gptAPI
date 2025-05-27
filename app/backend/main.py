@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from typing import List, Dict, Optional
 import uvicorn
+import g4f
+from fastapi import Body
 import json
 from datetime import datetime, timedelta
 from fastapi import HTTPException
@@ -10,9 +12,10 @@ from psycopg2.errors import UniqueViolation
 import schemas
 import crud
 import auth
-from db_adapter import DatabaseAdapter
+from db_adapter import SupabaseAdapter
 import psycopg2
 import os
+
 app = FastAPI(title="EasyGPT API Portal")
 
 
@@ -25,10 +28,9 @@ app.add_middleware(
 )
 
 
-db_adapter = DatabaseAdapter()
-db_adapter.connect()
-db_adapter.initialize_tables()
+db_adapter = SupabaseAdapter()
 
+print("hello")
 
 
 @app.post("/api/user")
@@ -265,6 +267,68 @@ def regenerate_token(
             "name": updated_token["name"]
         }
     }
+
+
+@app.post("/api/chat")
+async def chat_with_ai(
+    message: str = Body(..., embed=True),
+    current_user: Dict = Depends(auth.get_current_user)
+):
+    user_id = current_user["id"]
+
+    # 1. Получаем или инициализируем историю
+    record = db_adapter.get_single_by_value("user_dialogs", "user_id", user_id)
+    if record is None:
+        record = db_adapter.insert("user_dialogs", {"user_id": user_id, "messages": []})
+
+    #  — убедимся, что messages это список
+    raw = record.get("messages")
+    history = raw if isinstance(raw, list) else []
+
+    # 2. Добавляем новое пользовательское сообщение
+    history.append({"role": "user", "content": message})
+
+    # 3. Вызываем g4f
+    try:
+        response = g4f.ChatCompletion.create(
+            model="gpt-4o",
+            messages=history,
+            stream=False
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Ошибка при обращении к g4f: {e}")
+
+    # 4. Добавляем ответ в историю и сохраняем
+    history.append({"role": "assistant", "content": response})
+    db_adapter.update_by_value("user_dialogs", {"messages": history}, "user_id", user_id)
+
+    return {"reply": response}
+
+
+@app.post("/api/chat/clear")
+async def clear_chat(current_user: Dict = Depends(auth.get_current_user)):
+    """
+    Очищает историю диалога пользователя.
+    """
+    user_id = current_user["id"]
+    # Сбрасываем messages в пустой массив
+    updated = db_adapter.update_by_value("user_dialogs", {"messages": []}, "user_id", user_id)
+    if updated is None:
+        # если записи ещё не было — создаём пустую
+        db_adapter.insert("user_dialogs", {"user_id": user_id, "messages": []})
+    return {"detail": "Диалог очищен"}
+
+
+@app.get("/api/chat")
+async def get_chat_history(current_user: Dict = Depends(auth.get_current_user)):
+    """
+    Возвращает полный диалог пользователя.
+    """
+    user_id = current_user["id"]
+    record = db_adapter.get_single_by_value("user_dialogs", "user_id", user_id)
+    messages = record["messages"] if record else []
+    return {"history": messages}
+
 
 @app.get("/")
 async def root():

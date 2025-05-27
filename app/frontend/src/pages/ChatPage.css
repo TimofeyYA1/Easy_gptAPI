@@ -1,0 +1,157 @@
+/* ChatPage.css */
+:root {
+  --bg-dark: #0b0f1d;
+  --navbar-bg: #11172b;
+  --accent-blue: #4da8ff;
+  --text-light: #e2e8f0;
+  --text-muted: #a0aec0;
+}
+
+.chat-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-dark);
+  height: 100vh;
+  padding: 2vh 1vw;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 900px;
+  height: 70vh;
+  background: var(--navbar-bg);
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5), 0 0 30px rgba(77,168,255,0.2);
+  overflow: hidden;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-light);
+  background: var(--navbar-bg);
+  border-bottom: 1px solid #1c2236;
+  border-radius: 20px 20px 0 0;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: #0e152a;
+}
+
+.message {
+  max-width: 75%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.message.user {
+  align-self: flex-end;
+  background: var(--accent-blue);
+  color: #fff;
+}
+
+.message.bot {
+  align-self: flex-start;
+  background: #1c2236;
+  color: var(--text-light);
+}
+
+.chat-input-area {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background: #0a0d1a;
+  border-top: 1px solid #1c2236;
+  border-radius: 0 0 20px 20px;
+}
+
+.chat-input-area textarea {
+  flex: 1;
+  resize: none;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #11172b;
+  color: var(--text-light);
+  margin-right: 0.75rem;
+  max-height: 5vh;
+}
+
+.chat-input-area button {
+  padding: 0.75rem 1.5rem;
+  background: var(--accent-blue);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+}
+
+.chat-input-area button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.chat-input-area button:not(:disabled):hover {
+  background: #3399ff;
+  transform: translateY(-2px);
+}
+.clear-button {
+  background: transparent;
+  border: 1px solid var(--text-muted);
+  color: var(--text-muted);
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.clear-button:hover {
+  background: var(--text-muted);
+  color: var(--navbar-bg);
+}
+/* Под конец вашего ChatPage.css */
+
+.html-message {
+  background: #1c2236;
+  color: var(--text-light);
+  padding: 1rem;
+  border-radius: 12px;
+  font-family: monospace;
+  white-space: pre-wrap;   /* Сохранить отступы и показывать теги */
+  word-break: break-all;
+}
+
+.clear-button {
+  background: transparent;
+  border: 1px solid var(--text-muted);
+  color: var(--text-muted);
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.clear-button:hover {
+  background: var(--text-muted);
+  color: var(--navbar-bg);
+}

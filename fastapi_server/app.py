@@ -61,7 +61,6 @@ async def freekassa_callback(request: Request):
 
         # Пополнение баланса токена (где order_id — это токен)
         db = DatabaseAdapter()
-        db.connect()
 
         token = order_id
         token_data = db.get_by_value("tokens", "token", token)

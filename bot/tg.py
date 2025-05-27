@@ -30,8 +30,6 @@ freekassa_secret_word2 = os.getenv("FREEKASSA_SECRET_WORD2")
 bot = Bot(token=bot_token)
 dp = Dispatcher(storage=MemoryStorage())
 db = DatabaseAdapter()
-db.connect()
-db.initialize_tables()
 
 # FSM состояния
 class TokenRecharge(StatesGroup):

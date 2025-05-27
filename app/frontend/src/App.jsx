@@ -6,25 +6,22 @@ import LoginPage from './pages/AuthPage';
 import MyTokens from './pages/MyTokens';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
+import ChatPage from './pages/ChatPage';
 
 const App = () => {
   return (
     <Router>
       <Navbar />
       <Routes>
+        
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/login" element={<LoginPage />} />
+
+        <Route path="/chat" element={ <ProtectedRoute> <ChatPage /> </ProtectedRoute>}/>
+        <Route path="/tokens" element={ <ProtectedRoute> <MyTokens /> </ProtectedRoute>}/>
         
-        <Route
-          path="/tokens"
-          element={
-            <ProtectedRoute>
-              <MyTokens />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+        </Routes>
     </Router>
   );
 };

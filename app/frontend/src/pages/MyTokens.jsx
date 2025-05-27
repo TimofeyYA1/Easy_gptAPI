@@ -15,7 +15,7 @@ const TokensPage = () => {
 
   const fetchTokens = async () => {
     try {
-      const response = await fetch("http://localhost:8001/api/tokens", {
+      const response = await fetch("http://localhost:8000/api/tokens", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -39,7 +39,7 @@ const TokensPage = () => {
 
   const handleDeleteSelected = async () => {
     for (const id of selectedTokenIds) {
-      await fetch(`http://localhost:8001/api/tokens/${id}`, {
+      await fetch(`http://localhost:8000/api/tokens/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

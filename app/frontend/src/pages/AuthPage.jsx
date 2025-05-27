@@ -17,7 +17,7 @@ const LoginPage = () => {
     const endpoint = mode === 'login' ? '/api/login' : '/api/register';
 
     try {
-      const response = await fetch(`http://localhost:8001${endpoint}`, {
+      const response = await fetch(`http://localhost:8000${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': mode === 'login'

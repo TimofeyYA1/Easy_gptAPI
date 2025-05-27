@@ -13,7 +13,7 @@ const RenameTokenModal = ({ token, onClose, onRename }) => {
     }
 
     try {
-      await fetch(`http://localhost:8000/api/${token.token}/rename`, {
+      await fetch(`http://localhost:8001/api/${token.token}/rename`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

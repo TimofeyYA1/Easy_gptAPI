@@ -12,7 +12,7 @@ const CreateTokenModal = ({ onClose, onCreated, onError }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/api/tokens", {
+      const response = await fetch("http://localhost:8001/api/tokens", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

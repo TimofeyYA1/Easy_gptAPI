@@ -6,7 +6,7 @@ class DialogQuery(BaseModel):
     dialog_id: UUID
     token: str
     message: str
-    max_tokens: float
+    max_tokens: int
 
 class DialogRename(BaseModel):
     dialog_id: UUID
@@ -18,5 +18,4 @@ class DialogCreateRequest(BaseModel):
     title: Optional[str] = "Диалог"
     model: Optional[str] = "gpt-4o mini"
     temperature: Optional[float] = 0.3
-    max_tokens: Optional[int] = 1000
     system: Optional[str] = None

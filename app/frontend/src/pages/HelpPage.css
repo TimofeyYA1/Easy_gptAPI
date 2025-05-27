@@ -1,0 +1,46 @@
+.help-container {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  min-height: 100vh;
+  padding: 5vh 10vw;
+  overflow-y: auto;
+  overflow-y: auto; /* включаем вертикальную прокрутку */
+}
+
+.help-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.help-text h1 {
+  font-size: 2.2vw;
+  margin-bottom: 2vh;
+}
+
+.help-text h2 {
+  font-size: 1.5vw;
+  margin-top: 4vh;
+  color: var(--accent-blue);
+}
+
+.help-text p {
+  font-size: 1.1vw;
+  color: var(--text-muted);
+}
+
+pre {
+  background-color: #11172b;
+  padding: 1em;
+  border-radius: 10px;
+  color: var(--text-light);
+  font-size: 0.95vw;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-x: auto;
+  margin-top: 1vh;
+}
+
+section {
+  margin-bottom: 4vh;
+}

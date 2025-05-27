@@ -7,6 +7,7 @@ import MyTokens from './pages/MyTokens';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 import ChatPage from './pages/ChatPage';
+import HelpPage from './pages/HelpPage';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/instruction" element={<HelpPage />} />
 
         <Route path="/chat" element={ <ProtectedRoute> <ChatPage /> </ProtectedRoute>}/>
         <Route path="/tokens" element={ <ProtectedRoute> <MyTokens /> </ProtectedRoute>}/>

@@ -17,53 +17,38 @@ class DatabaseAdapter:
         self.client = create_client(url, key)
         print("✅ Соединение с Supabase установлено.")
 
-
-    def get_all(self, table_name: str) -> List[dict]:
+    def _check_client(self):
         if not self.client:
             raise RuntimeError("Client не инициализирован. Вызовите connect() первым.")
+
+    def get_all(self, table_name: str) -> List[dict]:
+        self._check_client()
         res = self.client.table(table_name).select("*").execute()
-        if res.error:
-            raise RuntimeError(f"Ошибка запроса get_all: {res.error}")
         return res.data
 
     def get_by_id(self, table_name: str, id: int | str) -> List[dict]:
-        if not self.client:
-            raise RuntimeError("Client не инициализирован. Вызовите connect() первым.")
+        self._check_client()
         res = self.client.table(table_name).select("*").eq("id", id).execute()
-        if res.error:
-            raise RuntimeError(f"Ошибка запроса get_by_id: {res.error}")
         return res.data
 
     def get_by_value(self, table_name: str, parameter: str, parameter_value: Any) -> List[dict]:
-        if not self.client:
-            raise RuntimeError("Client не инициализирован. Вызовите connect() первым.")
+        self._check_client()
         res = self.client.table(table_name).select("*").eq(parameter, parameter_value).execute()
-        if res.error:
-            raise RuntimeError(f"Ошибка запроса get_by_value: {res.error}")
         return res.data
 
     def insert(self, table_name: str, insert_dict: dict) -> List[dict]:
-        if not self.client:
-            raise RuntimeError("Client не инициализирован. Вызовите connect() первым.")
-        res = self.client.table(table_name).insert(insert_dict).select("*").execute()
-        if res.error:
-            raise RuntimeError(f"Ошибка запроса insert: {res.error}")
+        self._check_client()
+        res = self.client.table(table_name).insert(insert_dict).execute()
         return res.data
 
     def delete_by_value(self, table_name: str, parameter: str, parameter_value: Any) -> List[dict]:
-        if not self.client:
-            raise RuntimeError("Client не инициализирован. Вызовите connect() первым.")
-        res = self.client.table(table_name).delete().eq(parameter, parameter_value).select("*").execute()
-        if res.error:
-            raise RuntimeError(f"Ошибка запроса delete_by_value: {res.error}")
+        self._check_client()
+        res = self.client.table(table_name).delete().eq(parameter, parameter_value).execute()
         return res.data
 
     def update_by_value(self, table_name: str, update_dict: dict, parameter: str, value: Any) -> List[dict]:
-        if not self.client:
-            raise RuntimeError("Client не инициализирован. Вызовите connect() первым.")
-        res = self.client.table(table_name).update(update_dict).eq(parameter, value).select("*").execute()
-        if res.error:
-            raise RuntimeError(f"Ошибка запроса update_by_value: {res.error}")
+        self._check_client()
+        res = self.client.table(table_name).update(update_dict).eq(parameter, value).execute()
         return res.data
 
     def update(self, table_name: str, update_dict: dict, id: int) -> List[dict]:

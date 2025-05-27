@@ -19,9 +19,10 @@ const Navbar = () => {
       </div>
       <div className="nav-links">
         {token && <Link to="/tokens">Мои токены</Link>}
+        <Link to="/instruction">Как пользоваться?</Link>
         <Link to="/chat">Чат с ИИ</Link>
-        <Link to="/">Home</Link>
-        <Link to="/about">About</Link>
+        <Link to="/">Главная</Link>
+        <Link to="/about">О нас</Link>
 
         {token ? (
           <button onClick={handleLogout} className="nav-btn logout">Выйти</button> // Кнопка Выйти

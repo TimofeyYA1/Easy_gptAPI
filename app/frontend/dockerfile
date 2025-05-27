@@ -2,8 +2,17 @@ FROM node:18
 
 WORKDIR /app
 
-COPY app/frontend /app
+# Копируем package.json и package-lock.json для кеширования
+COPY app/frontend/package*.json ./
 
-RUN npm install
+# Устанавливаем зависимости
+RUN npm install --legacy-peer-deps && ls -la node_modules/react-scripts
 
+# Копируем остальной код
+COPY app/frontend/ ./
+
+# Указываем порт, если надо
+EXPOSE 3000
+
+# Запуск приложения
 CMD ["npm", "start"]

@@ -2,15 +2,13 @@ import './HelpPage.css';
 import React, { useEffect } from 'react';
 
 const HelpPage = () => {
-    useEffect(() => {
-    // Включаем прокрутку при заходе на HelpPage
+  useEffect(() => {
     document.body.style.overflow = 'auto';
-
-    // Когда уходим — возвращаем как было (например, отключаем)
     return () => {
       document.body.style.overflow = 'hidden';
     };
   }, []);
+
   return (
     <div className="help-container">
       <main className="help-content">
@@ -20,7 +18,8 @@ const HelpPage = () => {
 
           <section>
             <h2>📩 1. Отправка запроса к GPT</h2>
-            <p><strong>POST /ask_gpt-3.5-turbo</strong> — отправить одиночный запрос к GPT без истории.</p>
+            <p><strong>POST</strong> — отправить одиночный запрос к GPT без истории.</p>
+            <p><code>http://83.242.100.163:8001/ask_gpt-3.5-turbo</code></p>
             <pre>
 {`{
   "prompt": "Расскажи анекдот",
@@ -40,7 +39,8 @@ const HelpPage = () => {
 
           <section>
             <h2>💬 2. Создание нового диалога</h2>
-            <p><strong>POST /dialogs/create</strong> — создать диалог с заголовком и системной ролью.</p>
+            <p><strong>POST</strong> — создать диалог с заголовком и системной ролью.</p>
+            <p><code>http://83.242.100.163:8001/dialogs/create</code></p>
             <pre>
 {`{
   "token": "tok_abc123",
@@ -61,7 +61,8 @@ const HelpPage = () => {
 
           <section>
             <h2>🔁 3. Продолжение диалога</h2>
-            <p><strong>POST /dialogs/chat</strong> — отправить новое сообщение в диалоге.</p>
+            <p><strong>POST</strong> — отправить новое сообщение в диалоге.</p>
+            <p><code>http://83.242.100.163:8001/dialogs/chat</code></p>
             <pre>
 {`{
   "dialog_id": "uuid-1234",
@@ -83,7 +84,8 @@ const HelpPage = () => {
 
           <section>
             <h2>📄 4. Получить список диалогов</h2>
-            <p><strong>GET /dialogs/{`{token}`}</strong></p>
+            <p><strong>GET</strong> — получить все диалоги по токену.</p>
+            <p><code>http://83.242.100.163:8001/dialogs/{`{token}`}</code></p>
             <pre>
 {`{
   "dialogs": [
@@ -96,7 +98,8 @@ const HelpPage = () => {
 
           <section>
             <h2>🗑 5. Удаление диалога</h2>
-            <p><strong>DELETE /dialogs/{`{dialog_id}`}?token=tok_abc123</strong></p>
+            <p><strong>DELETE</strong> — удалить диалог по ID и токену.</p>
+            <p><code>http://83.242.100.163:8001/dialogs/{`{dialog_id}`}?token=tok_abc123</code></p>
             <pre>
 {`{
   "detail": "Диалог uuid-1234 удалён"
@@ -106,7 +109,8 @@ const HelpPage = () => {
 
           <section>
             <h2>✏️ 6. Переименование диалога</h2>
-            <p><strong>PATCH /dialogs/rename</strong></p>
+            <p><strong>PATCH</strong> — переименовать существующий диалог.</p>
+            <p><code>http://83.242.100.163:8001/dialogs/rename</code></p>
             <pre>
 {`{
   "dialog_id": "uuid-1234",
@@ -120,6 +124,23 @@ const HelpPage = () => {
   "detail": "Диалог uuid-1234 переименован в 'Новый заголовок'"
 }`}
             </pre>
+          </section>
+
+          <hr style={{ marginTop: '40px' }} />
+
+          <section>
+            <h2>📚 Документация API</h2>
+            <p>
+              Полная интерактивная документация Swagger доступна по адресу:&nbsp;
+              <a
+                href="http://83.242.100.163:8001/docs#/"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: '#6daaff', textDecoration: 'underline' }}
+              >
+                http://83.242.100.163:8001/docs#/
+              </a>
+            </p>
           </section>
         </div>
       </main>

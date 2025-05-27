@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { FiCopy } from 'react-icons/fi';
-import RenameTokenModal from './RenameTokenModal'; // импортируем модалку
+import RenameTokenModal from './RenameTokenModal';
 import './TokenCard.css';
 
 const TokenCard = ({ token, selected, onSelect, onUpdate }) => {
@@ -9,6 +9,7 @@ const TokenCard = ({ token, selected, onSelect, onUpdate }) => {
   const iconRef = useRef(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   const [showRenameModal, setShowRenameModal] = useState(false);
+  const [showTopUpModal, setShowTopUpModal] = useState(false); // для модалки пополнения
 
   const handleCopy = () => {
     navigator.clipboard.writeText(token.token);
@@ -39,8 +40,8 @@ const TokenCard = ({ token, selected, onSelect, onUpdate }) => {
   };
 
   const handleRename = () => {
-      console.log("handleRename вызван"); // Это поможет понять, вызывается ли обработчик
-      setShowRenameModal(true);
+    console.log("handleRename вызван");
+    setShowRenameModal(true);
   };
 
   useEffect(() => {
@@ -62,14 +63,34 @@ const TokenCard = ({ token, selected, onSelect, onUpdate }) => {
   const renderMenu = () => (
     <div
       className="dropdown-menu"
-      style={{ position: 'fixed', top: menuPosition.top, left: menuPosition.left,width:160 }}
+      style={{ position: 'fixed', top: menuPosition.top, left: menuPosition.left, width: 160 }}
     >
       <div onClick={handleRename}>Переименовать</div>
       <div onClick={handleDelete}>Удалить</div>
       <div onClick={handleGen}>Перегенирировать</div>
     </div>
   );
-  console.log(showRenameModal);
+
+  const renderTopUpModal = () => (
+ <div className="modal-overlay">
+    <div className="modal-content">
+      <p>
+        Пока эта функция недоступна. Если хотите узнать больше — пишите в&nbsp;
+        <a
+          href="https://t.me/timofeyakov1"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: '#6daaff', textDecoration: 'underline' }}
+        >
+          Telegram
+        </a>
+        .
+      </p>
+      <button onClick={() => setShowTopUpModal(false)}>Закрыть</button>
+    </div>
+  </div>  
+  );
+
   return (
     <>
       <div className="token-card">
@@ -85,7 +106,7 @@ const TokenCard = ({ token, selected, onSelect, onUpdate }) => {
           <FiCopy className="copy-icon" onClick={handleCopy} title="Копировать" />
         </div>
         <div className="token-balance">{token.balance}</div>
-        <button className="top-up-btn">Пополнить</button>
+        <button className="top-up-btn" onClick={() => setShowTopUpModal(true)}>Пополнить</button>
         <div className="menu-icon" onClick={() => setMenuOpen(!menuOpen)} ref={iconRef}>
           ⋮
         </div>
@@ -97,9 +118,11 @@ const TokenCard = ({ token, selected, onSelect, onUpdate }) => {
         <RenameTokenModal
           token={token}
           onClose={() => setShowRenameModal(false)}
-          onRename={onUpdate} // обновляем список токенов
+          onRename={onUpdate}
         />
       )}
+
+      {showTopUpModal && ReactDOM.createPortal(renderTopUpModal(), document.body)}
     </>
   );
 };

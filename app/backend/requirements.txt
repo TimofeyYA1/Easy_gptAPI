@@ -7,3 +7,5 @@ openai
 tiktoken
 supabase
 g4f
+python-jose==3.4.0
+passlib==1.7.4

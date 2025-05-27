@@ -1,55 +1,96 @@
 
-services:
-  postgresql:
-    image: postgres:13
-    container_name: pgsql
-    ports:
-      - "5432:5432" 
-    environment:
-      POSTGRES_DB: ${DBNAME}
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    restart: unless-stopped
+# services:
+  # postgresql:
+  #   image: postgres:13
+  #   container_name: pgsql
+  #   ports:
+  #     - "5432:5432" 
+  #   environment:
+  #     POSTGRES_DB: ${DBNAME}
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: ${DB_PASSWORD}
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   restart: unless-stopped
 
-  app_api:
-    image: easy_gptapi-app_api
-    container_name: backend_container
-    depends_on:
-      - postgresql
+  # app_api:
+  #   image: easy_gptapi-app_api
+  #   container_name: backend_container
+  #   depends_on:
+  #     - postgresql
+  #   environment:
+  #     FAST_API_HOST: 0.0.0.0
+  #     FAST_API_PORT: 8000
+  #     DBNAME: ${DBNAME}
+  #     DB_PASSWORD: ${DB_PASSWORD}
+  #     DB_HOST: postgresql
+  #     DB_PORT: 5432
+  #     OPENAI_API_KEY: ${OPENAI_API_KEY}
+  #     TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+  #     ADMIN_ID: ${ADMIN_ID}
+  #     FREEKASSA_MERCHANT_ID: ${FREEKASSA_MERCHANT_ID}
+  #     FREEKASSA_SECRET_WORD: ${FREEKASSA_SECRET_WORD}
+  #     FREEKASSA_SECRET_WORD2: ${FREEKASSA_SECRET_WORD2}
+  #     SUPABASE_URL: ${SUPABASE_URL}
+  #     SUPABASE_KEY: ${SUPABASE_KEY}
+  #   ports:
+  #     - "8000:8000"
+  #   restart: unless-stopped
+
+  # telegram_bot:
+  #   image: easy_gptapi-telegram_bot
+  #   container_name: telegram_bot
+  #   depends_on:
+  #     - postgresql
+  #     - app_api
+  #   environment:
+  #     DBNAME: ${DBNAME}
+  #     DB_PASSWORD: ${DB_PASSWORD}
+  #     DB_HOST: postgresql
+  #     DB_PORT: 5432
+  #     TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+  #   restart: unless-stopped
+
+# volumes:
+version: '3.9'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: app/frontend/Dockerfile
+    ports:
+      - "3000:3000"
     environment:
-      FAST_API_HOST: 0.0.0.0
-      FAST_API_PORT: 8000
-      DBNAME: ${DBNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_HOST: postgresql
-      DB_PORT: 5432
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
-      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
-      ADMIN_ID: ${ADMIN_ID}
-      FREEKASSA_MERCHANT_ID: ${FREEKASSA_MERCHANT_ID}
-      FREEKASSA_SECRET_WORD: ${FREEKASSA_SECRET_WORD}
-      FREEKASSA_SECRET_WORD2: ${FREEKASSA_SECRET_WORD2}
-      SUPABASE_URL: ${SUPABASE_URL}
-      SUPABASE_KEY: ${SUPABASE_KEY}
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - backend
+    volumes:
+      - ./app/frontend:/app
+    restart: always
+
+  backend:
+    build:
+      context: .
+      dockerfile: app/backend/Dockerfile
     ports:
       - "8000:8000"
-    restart: unless-stopped
+    env_file:
+      - ./.env
+    command: ["python", "run.py"]
+    volumes:
+      - ./app/backend:/app
+    restart: always
 
-  telegram_bot:
-    image: easy_gptapi-telegram_bot
-    container_name: telegram_bot
-    depends_on:
-      - postgresql
-      - app_api
-    environment:
-      DBNAME: ${DBNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_HOST: postgresql
-      DB_PORT: 5432
-      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
-    restart: unless-stopped
-
-volumes:
-  postgres_data:
+  fastapi_server:
+    build:
+      context: .
+      dockerfile: fastapi_server/Dockerfile
+    ports:
+      - "8001:8001"
+    env_file:
+      - ./.env
+    command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8001"]
+    volumes:
+      - ./fastapi_server:/app
+    restart: always

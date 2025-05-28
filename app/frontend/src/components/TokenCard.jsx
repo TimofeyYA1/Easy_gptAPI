@@ -16,7 +16,7 @@ const TokenCard = ({ token, selected, onSelect, onUpdate }) => {
   };
 
   const handleDelete = async () => {
-    await fetch(`http://localhost:8000/api/tokens/${token.id}`, {
+    await fetch(`http://83.242.100.163:8000/api/tokens/${token.id}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -26,7 +26,7 @@ const TokenCard = ({ token, selected, onSelect, onUpdate }) => {
   };
 
   const handleGen = async () => {
-    await fetch(`http://localhost:8000/api/${token.token}/regenerate`, {
+    await fetch(`http://83.242.100.163:8000/api/${token.token}/regenerate`, {
       method: 'PATCH',
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,

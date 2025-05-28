@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ChatPage.css';
 
-const API_BASE = "http://localhost:8000";
+const API_BASE = "http://83.242.100.163:8000";
 
 const ChatPage = () => {
   const navigate = useNavigate();

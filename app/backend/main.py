@@ -15,7 +15,7 @@ import auth
 from db_adapter import SupabaseAdapter
 import psycopg2
 import os
-
+import asyncio
 app = FastAPI(title="EasyGPT API Portal")
 
 
@@ -276,31 +276,35 @@ async def chat_with_ai(
 ):
     user_id = current_user["id"]
 
-    # 1. Получаем или инициализируем историю
     record = db_adapter.get_single_by_value("user_dialogs", "user_id", user_id)
     if record is None:
         record = db_adapter.insert("user_dialogs", {"user_id": user_id, "messages": []})
 
-    #  — убедимся, что messages это список
+    # 2. Проверка формата истории
     raw = record.get("messages")
     history = raw if isinstance(raw, list) else []
 
-    # 2. Добавляем новое пользовательское сообщение
+    # 3. Добавляем новое сообщение пользователя
     history.append({"role": "user", "content": message})
 
-    # 3. Вызываем g4f
+    # 4. Вызов g4f в отдельном потоке
+    loop = asyncio.get_event_loop()
     try:
-        response = g4f.ChatCompletion.create(
+        response = await loop.run_in_executor(None, lambda: g4f.ChatCompletion.create(
             model="gpt-4o",
             messages=history,
             stream=False
-        )
+        ))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Ошибка при обращении к g4f: {e}")
 
-    # 4. Добавляем ответ в историю и сохраняем
+    # 5. Добавляем ответ ассистента и сохраняем историю
     history.append({"role": "assistant", "content": response})
     db_adapter.update_by_value("user_dialogs", {"messages": history}, "user_id", user_id)
+
+    # 6. Проверка лимита
+    if response == "You have reached your request limit for the hour. [Upgrade for higher rate limits](https://www.blackbox.ai/pricing?ref=rate-limit)":
+        response = "К сожалению, сейчас наша модель недоступна. Вы можете попробовать позже."
 
     return {"reply": response}
 

@@ -7,9 +7,6 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from dotenv import load_dotenv
 import schemas
-from fastapi.security import APIKeyHeader
-
-oauth2_scheme = APIKeyHeader(name="Authorization")
 
 # Загрузка переменных окружения
 load_dotenv()
@@ -21,6 +18,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/token")
 
 
 import crud
